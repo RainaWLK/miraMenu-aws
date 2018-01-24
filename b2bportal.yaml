@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Mira Menu B2B portal service
+Resources:
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: portal.mira.menu-bak
+      AccessControl: PublicRead
+      VersioningConfiguration: 
+        Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+    DeletionPolicy: Delete
+
+  BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref S3Bucket
+                - /*
+      Bucket: !Ref S3Bucket
+
+  WebsiteCDN:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig: 
+        Aliases: !Join
+        - ''
+        - - !Ref AWS::StackName
+          - !Ref AWS::AccountId
+          - '.'
+          - !Ref AWS::Region
+          - '.'
+          - !Ref HostedZone 
+        CacheBehaviors:
+          CacheBehavior
+        Comment: String
+        CustomErrorResponses:
+          CustomErrorResponse
+        DefaultCacheBehavior:
+          DefaultCacheBehavior
+        DefaultRootObject: String
+        Enabled: Boolean
+        HttpVersion: String
+        IPV6Enabled: Boolean
+        Logging:
+          Logging
+        Origins:
+          Origin
+        PriceClass: String
+        Restrictions:
+          Restriction
+        ViewerCertificate:
+          ViewerCertificate
+        WebACLId: String
+      Tags: 
+        - Tag
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt 
+      - S3Bucket
+      - WebsiteURL
+    Description: URL for website hosted on S3
+  S3BucketSecureURL:
+    Value: !Join 
+      - ''
+      - - 'https://'
+        - !GetAtt 
+          - S3Bucket
+          - DomainName
+    Description: Name of S3 bucket to hold website content
