@@ -1,0 +1,151 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  zonemiramenu:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: mira.menu.
+      HostedZoneConfig:
+        Comment: MiraMenu
+  dnsmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: mira.menu.
+        Type: TXT
+        TTL: '3600'
+        ResourceRecords:
+        - '"google-site-verification=2OJV5DrgHPwAt-FiPGWZ-UYn-2vVEhx6TZbFVqGDiVo"'
+  dnsamazonsesmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: _amazonses.mira.menu.
+        Type: TXT
+        TTL: '1800'
+        ResourceRecords:
+        - '"BsChFG1AiQtW+NOqVmhLHAU8I7zF3DMinZq84WEJr04="'
+  dnsco5cfwldtrkbduhcpfuiaim5lci72hyzdomainkeymiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: co5cfwldtrkbduhcpfuiaim5lci72hyz._domainkey.mira.menu.
+        Type: CNAME
+        TTL: '1800'
+        ResourceRecords:
+        - co5cfwldtrkbduhcpfuiaim5lci72hyz.dkim.amazonses.com
+  dnsdr4vdtbiedulk6xzzmiywp3ios6cny4fdomainkeymiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: dr4vdtbiedulk6xzzmiywp3ios6cny4f._domainkey.mira.menu.
+        Type: CNAME
+        TTL: '1800'
+        ResourceRecords:
+        - dr4vdtbiedulk6xzzmiywp3ios6cny4f.dkim.amazonses.com
+  dnsu5qjpz4oe3fsivqv5mzuurj7irn2m5ufdomainkeymiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: u5qjpz4oe3fsivqv5mzuurj7irn2m5uf._domainkey.mira.menu.
+        Type: CNAME
+        TTL: '1800'
+        ResourceRecords:
+        - u5qjpz4oe3fsivqv5mzuurj7irn2m5uf.dkim.amazonses.com
+  dnsapimiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: api.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: d3pmk4p926mshj.cloudfront.net
+  dnsb2bapimiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: b2bapi.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: d3f6svzwaqjjnq.cloudfront.net
+  dnscdnmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: cdn.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: d3t1a0tow2astk.cloudfront.net
+  dnsdevmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: dev.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: dleedd3rcniox.cloudfront.net
+  dnsdevelopermiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: developer.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: d15jdeimypslsi.cloudfront.net
+  dnsfbmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: fb.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z3AQBSTGFYJSTF
+          DNSName: s3-website-us-east-1.amazonaws.com
+  dnsportaldevmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: portal-dev.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: d2xkwbtot1q5xi.cloudfront.net
+  dnsportalmiramenu:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId:
+        Ref: zonemiramenu
+      RecordSets:
+      - Name: portal.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: d2ar4dvcj6xajz.cloudfront.net

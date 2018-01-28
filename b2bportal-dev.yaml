@@ -13,23 +13,89 @@ Resources:
         ErrorDocument: error.html
     DeletionPolicy: Delete
 
-  BucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
+  WebsiteCDN:
+    Type: AWS::CloudFront::Distribution
     Properties:
-      PolicyDocument:
-        Id: MyPolicy
-        Version: 2012-10-17
-        Statement:
-          - Sid: PublicReadForGetBucketObjects
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join 
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref S3Bucket
-                - /*
-      Bucket: !Ref S3Bucket
+      DistributionConfig:
+        Aliases:
+        - portal-dev.mira.menu-bak
+        Comment: orz
+        DefaultRootObject: index.html
+        Enabled: true
+        IPV6Enabled: true
+        PriceClass: PriceClass_100
+#        CacheBehaviors:
+#        - TargetOriginId: Custom-aoboid0wkl.execute-api.us-east-1.amazonaws.com/development
+#          PathPattern: "/v1/*"
+#          ViewerProtocolPolicy: https-only
+#          MinTTL: 0
+#          AllowedMethods:
+#          - HEAD
+#          - DELETE
+#          - POST
+#          - GET
+#          - OPTIONS
+#          - PUT
+#          - PATCH
+#          CachedMethods:
+#          - HEAD
+#          - GET
+#          - OPTIONS
+#          ForwardedValues:
+#            QueryString: true
+#            Headers:
+#            - Accept
+#            - Authorization
+#            - Content-Type
+#            - Date
+#            - Referer
+#            Cookies:
+#              Forward: none
+        DefaultCacheBehavior:
+          TargetOriginId: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: !GetAtt 
+          - S3Bucket
+          - DomainName
+          Id: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          S3OriginConfig: {}
+#        - DomainName: aoboid0wkl.execute-api.us-east-1.amazonaws.com
+#          Id: Custom-aoboid0wkl.execute-api.us-east-1.amazonaws.com/development
+#          OriginPath: "/development"
+#          S3OriginConfig:
+#            HTTPPort: '80'
+#            HTTPSPort: '443'
+#            OriginProtocolPolicy: https-only
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:552950262288:certificate/a301990c-6368-4b13-bb8a-dcbdb2bf0973
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
 
 Outputs:
   WebsiteURL:
@@ -45,3 +111,7 @@ Outputs:
           - S3Bucket
           - DomainName
     Description: Name of S3 bucket to hold website content
+  CloudFrontURL:
+    Value: !GetAtt
+      - WebsiteCDN
+      - DomainName

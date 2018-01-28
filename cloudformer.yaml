@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: us-east-1
+Resources:
+  topicDBUpdate:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: DBUpdate
+      Subscription:
+      - Endpoint: arn:aws:lambda:us-east-1:552950262288:function:dbupdater
+        Protocol: lambda
+      - Endpoint: arn:aws:lambda:us-east-1:552950262288:function:dev-dbupdater
+        Protocol: lambda
+  snspolicyDBUpdate:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+      - Ref: topicDBUpdate
+      PolicyDocument:
+        Version: '2008-10-17'
+        Id: __default_policy_ID
+        Statement:
+        - Sid: __default_statement_ID
+          Effect: Allow
+          Principal:
+            AWS: "*"
+          Action:
+          - SNS:GetTopicAttributes
+          - SNS:SetTopicAttributes
+          - SNS:AddPermission
+          - SNS:RemovePermission
+          - SNS:DeleteTopic
+          - SNS:Subscribe
+          - SNS:ListSubscriptionsByTopic
+          - SNS:Publish
+          - SNS:Receive
+          Resource:
+            Ref: topicDBUpdate
+          Condition:
+            StringEquals:
+              AWS:SourceOwner: '552950262288'
+

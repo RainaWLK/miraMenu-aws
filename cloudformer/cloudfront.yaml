@@ -1,0 +1,202 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  distd3t1a0tow2astkcloudfrontnet:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - cdn.mira.menu
+        Enabled: true
+        PriceClass: PriceClass_200
+        DefaultCacheBehavior:
+          TargetOriginId: S3-meshphoto
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          - OPTIONS
+          CachedMethods:
+          - HEAD
+          - GET
+          - OPTIONS
+          ForwardedValues:
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: meshphoto.s3.amazonaws.com
+          Id: S3-meshphoto
+          S3OriginConfig: {}
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate:
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+  distd15jdeimypslsicloudfrontnet:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - developer.mira.menu
+        Enabled: true
+        PriceClass: PriceClass_100
+        DefaultCacheBehavior:
+          TargetOriginId: S3-mesh-dev-site
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: mesh-dev-site.s3.amazonaws.com
+          Id: S3-mesh-dev-site
+          S3OriginConfig: {}
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate:
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+  distd147fcq36748p6cloudfrontnet:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - mira.menu
+        Enabled: true
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_200
+        CacheBehaviors:
+        - TargetOriginId: API-oji5jlxta0.execute-api.us-east-1.amazonaws.com/v1
+          PathPattern: "/v1/*"
+          ViewerProtocolPolicy: https-only
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - DELETE
+          - POST
+          - GET
+          - OPTIONS
+          - PUT
+          - PATCH
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Headers:
+            - Accept
+            - Authorization
+            - Content-Type
+            - Date
+            - Referer
+            Cookies:
+              Forward: none
+        DefaultCacheBehavior:
+          TargetOriginId: S3-mira.menu
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: mira.menu.s3.amazonaws.com
+          Id: S3-mira.menu
+          S3OriginConfig: {}
+        - DomainName: oji5jlxta0.execute-api.us-east-1.amazonaws.com
+          Id: API-oji5jlxta0.execute-api.us-east-1.amazonaws.com/v1
+          OriginPath: "/v1"
+          S3OriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: https-only
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate:
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+  distdleedd3rcnioxcloudfrontnet:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - dev.mira.menu
+        Enabled: true
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_200
+        CacheBehaviors:
+        - TargetOriginId: B2C-DEV-API
+          PathPattern: "/v1/*"
+          ViewerProtocolPolicy: https-only
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - DELETE
+          - POST
+          - GET
+          - OPTIONS
+          - PUT
+          - PATCH
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Headers:
+            - Accept
+            - Authorization
+            - Content-Type
+            - Date
+            - Referer
+            Cookies:
+              Forward: none
+        DefaultCacheBehavior:
+          TargetOriginId: S3-dev.mira.menu
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: dev.mira.menu.s3.amazonaws.com
+          Id: S3-dev.mira.menu
+          S3OriginConfig: {}
+        - DomainName: oji5jlxta0.execute-api.us-east-1.amazonaws.com
+          Id: B2C-DEV-API
+          OriginPath: "/dev"
+          S3OriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: https-only
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate:
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016

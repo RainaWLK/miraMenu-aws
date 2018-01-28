@@ -13,59 +13,93 @@ Resources:
         ErrorDocument: error.html
     DeletionPolicy: Delete
 
-  BucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      PolicyDocument:
-        Id: MyPolicy
-        Version: 2012-10-17
-        Statement:
-          - Sid: PublicReadForGetBucketObjects
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join 
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref S3Bucket
-                - /*
-      Bucket: !Ref S3Bucket
-
   WebsiteCDN:
     Type: 'AWS::CloudFront::Distribution'
     Properties:
       DistributionConfig: 
-        Aliases: !Join
-        - ''
-        - - !Ref AWS::StackName
-          - !Ref AWS::AccountId
-          - '.'
-          - !Ref AWS::Region
-          - '.'
-          - !Ref HostedZone 
-        CacheBehaviors:
-          CacheBehavior
-        Comment: String
-        CustomErrorResponses:
-          CustomErrorResponse
+        Aliases:
+        - portal.mira.menu-bak
+        Comment: orz
+        DefaultRootObject: index.html
+        Enabled: true
+        IPV6Enabled: true
+        PriceClass: PriceClass_100
         DefaultCacheBehavior:
-          DefaultCacheBehavior
-        DefaultRootObject: String
-        Enabled: Boolean
-        HttpVersion: String
-        IPV6Enabled: Boolean
-        Logging:
-          Logging
+          TargetOriginId: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          Compress: true
         Origins:
-          Origin
-        PriceClass: String
+        - DomainName: !GetAtt 
+          - S3Bucket
+          - DomainName
+          Id: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          S3OriginConfig: {}
+#        - DomainName: aoboid0wkl.execute-api.us-east-1.amazonaws.com
+#          Id: API-aoboid0wkl.execute-api.us-east-1.amazonaws.com/auth
+#          OriginPath: "/auth"
+#          S3OriginConfig:
+#            HTTPPort: '80'
+#            HTTPSPort: '443'
+#            OriginProtocolPolicy: https-only
         Restrictions:
-          Restriction
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
         ViewerCertificate:
-          ViewerCertificate
-        WebACLId: String
-      Tags: 
-        - Tag
+          AcmCertificateArn: arn:aws:acm:us-east-1:552950262288:certificate/a301990c-6368-4b13-bb8a-dcbdb2bf0973
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+
+  
+#        CacheBehaviors:
+#        - TargetOriginId: API-aoboid0wkl.execute-api.us-east-1.amazonaws.com/auth
+#          PathPattern: "/v1/*"
+#          ViewerProtocolPolicy: https-only
+#          MinTTL: 0
+#          AllowedMethods:
+#          - HEAD
+#          - DELETE
+#          - POST
+#          - GET
+#          - OPTIONS
+#          - PUT
+#          - PATCH
+#          CachedMethods:
+#          - HEAD
+#          - GET
+#          - OPTIONS
+#          ForwardedValues:
+#            QueryString: true
+#            Headers:
+#            - Accept
+#            - Authorization
+#            - Content-Type
+#            - Date
+#            - Referer
+#            Cookies:
+#              Forward: none
+
 
 Outputs:
   WebsiteURL:
