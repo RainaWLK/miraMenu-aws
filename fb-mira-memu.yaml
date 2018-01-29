@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Facebook redirect
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: fb.mira.menu
+      AccessControl: PublicRead
+      VersioningConfiguration:
+        Status: Suspended
+      WebsiteConfiguration:
+        RedirectAllRequestsTo: 
+          HostName: www.facebook.com/miramenutw
+          Protocol: https
+    DeletionPolicy: Delete
+
+  WebsiteDNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: mira.menu.
+      RecordSets:
+      - Name: fb.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z3BJ6K6RIION7M
+          DNSName: !Join
+          - ''
+          - - 's3-website-'
+            - !Ref "AWS::Region"
+            - '.amazonaws.com'
+      - Name: fb.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z3BJ6K6RIION7M
+          DNSName: !Join
+          - ''
+          - - 's3-website-'
+            - !Ref "AWS::Region"
+            - '.amazonaws.com'
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt 
+      - S3Bucket
+      - WebsiteURL
+    Description: URL for website hosted on S3

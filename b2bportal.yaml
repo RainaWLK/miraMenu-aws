@@ -19,11 +19,39 @@ Resources:
       DistributionConfig: 
         Aliases:
         - portal.mira.menu-bak
-        Comment: orz
+        Comment: B2B portal
         DefaultRootObject: index.html
         Enabled: true
         IPV6Enabled: true
         PriceClass: PriceClass_100
+        HttpVersion: http2
+#        CacheBehaviors:
+#        - TargetOriginId: API-aoboid0wkl.execute-api.us-east-1.amazonaws.com/auth
+#          PathPattern: "/v1/*"
+#          ViewerProtocolPolicy: https-only
+#          MinTTL: 0
+#          AllowedMethods:
+#          - HEAD
+#          - DELETE
+#          - POST
+#          - GET
+#          - OPTIONS
+#          - PUT
+#          - PATCH
+#          CachedMethods:
+#          - HEAD
+#          - GET
+#          - OPTIONS
+#          ForwardedValues:
+#            QueryString: true
+#            Headers:
+#            - Accept
+#            - Authorization
+#            - Content-Type
+#            - Date
+#            - Referer
+#            Cookies:
+#              Forward: none
         DefaultCacheBehavior:
           TargetOriginId: !Join
             - ''
@@ -40,7 +68,7 @@ Resources:
           - HEAD
           - GET
           ForwardedValues:
-            QueryString: true
+            QueryString: false
             Cookies:
               Forward: none
           Compress: true
@@ -71,35 +99,26 @@ Resources:
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.1_2016
 
-  
-#        CacheBehaviors:
-#        - TargetOriginId: API-aoboid0wkl.execute-api.us-east-1.amazonaws.com/auth
-#          PathPattern: "/v1/*"
-#          ViewerProtocolPolicy: https-only
-#          MinTTL: 0
-#          AllowedMethods:
-#          - HEAD
-#          - DELETE
-#          - POST
-#          - GET
-#          - OPTIONS
-#          - PUT
-#          - PATCH
-#          CachedMethods:
-#          - HEAD
-#          - GET
-#          - OPTIONS
-#          ForwardedValues:
-#            QueryString: true
-#            Headers:
-#            - Accept
-#            - Authorization
-#            - Content-Type
-#            - Date
-#            - Referer
-#            Cookies:
-#              Forward: none
-
+  WebsiteDNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      Comment: B2B portal
+      HostedZoneName: mira.menu.
+      RecordSets:
+      - Name: portal.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2  #For CloudFront, use Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
+      - Name: portal.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2  #For CloudFront, use Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName 
 
 Outputs:
   WebsiteURL:

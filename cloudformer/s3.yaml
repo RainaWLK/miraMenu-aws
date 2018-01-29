@@ -1,16 +1,4 @@
 
-  s3devmiramenu:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicReadWrite
-      VersioningConfiguration:
-        Status: Enabled
-  s3fbmiramenu:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicRead
-      VersioningConfiguration:
-        Status: Suspended
   s3meshdevsite:
     Type: AWS::S3::Bucket
     Properties:
@@ -74,11 +62,5 @@
       Tags:
       - Key: STAGE
         Value: prod
-  s3miramenu:
-    Type: AWS::S3::Bucket
-    Properties:
-      AccessControl: PublicReadWrite
-      VersioningConfiguration:
-        Status: Enabled
 
 

@@ -4,7 +4,7 @@ Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: portal-dev.mira.menu-bak
+      BucketName: portal-dev.mira.menu
       AccessControl: PublicRead
       VersioningConfiguration: 
         Status: Enabled
@@ -18,12 +18,13 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-        - portal-dev.mira.menu-bak
-        Comment: orz
+        - portal-dev.mira.menu
+        Comment: B2B portal dev
         DefaultRootObject: index.html
         Enabled: true
         IPV6Enabled: true
         PriceClass: PriceClass_100
+        HttpVersion: http2
 #        CacheBehaviors:
 #        - TargetOriginId: Custom-aoboid0wkl.execute-api.us-east-1.amazonaws.com/development
 #          PathPattern: "/v1/*"
@@ -67,7 +68,7 @@ Resources:
           - HEAD
           - GET
           ForwardedValues:
-            QueryString: true
+            QueryString: false
             Cookies:
               Forward: none
         Origins:
@@ -96,6 +97,27 @@ Resources:
           AcmCertificateArn: arn:aws:acm:us-east-1:552950262288:certificate/a301990c-6368-4b13-bb8a-dcbdb2bf0973
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.1_2016
+
+  WebsiteDNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      Comment: B2B portal development site
+      HostedZoneName: mira.menu.
+      RecordSets:
+      - Name: portal-dev.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2  #For CloudFront, use Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
+      - Name: portal-dev.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2  #For CloudFront, use Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
 
 Outputs:
   WebsiteURL:

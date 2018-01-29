@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Mira Menu B2C portal service
+Description: Mira Menu website dev service
 Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: dev.mira.menu-bak
+      BucketName: dev.mira.menu
       AccessControl: PublicRead
       VersioningConfiguration: 
         Status: Enabled
@@ -13,23 +13,110 @@ Resources:
         ErrorDocument: error.html
     DeletionPolicy: Delete
 
-  BucketPolicy:
-    Type: 'AWS::S3::BucketPolicy'
+  WebsiteCDN:
+    Type: AWS::CloudFront::Distribution
     Properties:
-      PolicyDocument:
-        Id: MyPolicy
-        Version: 2012-10-17
-        Statement:
-          - Sid: PublicReadForGetBucketObjects
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join 
-              - ''
-              - - 'arn:aws:s3:::'
-                - !Ref S3Bucket
-                - /*
-      Bucket: !Ref S3Bucket
+      DistributionConfig:
+        Aliases:
+        - dev.mira.menu
+        Comment: Mira Menu website dev
+        DefaultRootObject: index.html
+        Enabled: true
+        IPV6Enabled: true
+        PriceClass: PriceClass_200
+        HttpVersion: http2
+#        CacheBehaviors:
+#        - TargetOriginId: B2C-DEV-API
+#          PathPattern: "/v1/*"
+#          ViewerProtocolPolicy: https-only
+#          MinTTL: 0
+#          AllowedMethods:
+#          - HEAD
+#          - DELETE
+#          - POST
+#          - GET
+#          - OPTIONS
+#          - PUT
+#          - PATCH
+#          CachedMethods:
+#          - HEAD
+#          - GET
+#          ForwardedValues:
+#            QueryString: true
+#            Headers:
+#            - Accept
+#            - Authorization
+#            - Content-Type
+#            - Date
+#            - Referer
+#            Cookies:
+#              Forward: none
+        DefaultCacheBehavior:
+          TargetOriginId: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: !GetAtt 
+          - S3Bucket
+          - DomainName
+          Id: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          S3OriginConfig: {}
+#        - DomainName: oji5jlxta0.execute-api.us-east-1.amazonaws.com
+#          Id: B2C-DEV-API
+#          OriginPath: "/dev"
+#          S3OriginConfig:
+#            HTTPPort: '80'
+#            HTTPSPort: '443'
+#            OriginProtocolPolicy: https-only
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate: 
+          AcmCertificateArn: arn:aws:acm:us-east-1:552950262288:certificate/a301990c-6368-4b13-bb8a-dcbdb2bf0973
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+
+  WebsiteDNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      Comment: Mira Menu website dev
+      HostedZoneName: mira.menu.
+      RecordSets:
+      - Name: dev.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2  #For CloudFront, use Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
+      - Name: dev.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2  #For CloudFront, use Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
 
 Outputs:
   WebsiteURL:
@@ -45,3 +132,7 @@ Outputs:
           - S3Bucket
           - DomainName
     Description: Name of S3 bucket to hold website content
+  CloudFrontURL:
+    Value: !GetAtt
+      - WebsiteCDN
+      - DomainName
