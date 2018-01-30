@@ -1,12 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  zonemiramenu:
-    Type: AWS::Route53::HostedZone
-    Properties:
-      Name: mira.menu.
-      HostedZoneConfig:
-        Comment: MiraMenu
-
   dnsapimiramenu:
     Type: AWS::Route53::RecordSetGroup
     Properties:
@@ -53,62 +46,3 @@ Resources:
           HostedZoneId: Z2FDTNDATAQYW2
           DNSName: d15jdeimypslsi.cloudfront.net
 
-#gmail
-  dnsmiramenu:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneId:
-        Ref: zonemiramenu
-      RecordSets:
-      - Name: mira.menu.
-        Type: TXT
-        TTL: '3600'
-        ResourceRecords:
-        - '"google-site-verification=2OJV5DrgHPwAt-FiPGWZ-UYn-2vVEhx6TZbFVqGDiVo"'
-
-
-# domain name verify
-  dnsamazonsesmiramenu:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneId:
-        Ref: zonemiramenu
-      RecordSets:
-      - Name: _amazonses.mira.menu.
-        Type: TXT
-        TTL: '1800'
-        ResourceRecords:
-        - '"BsChFG1AiQtW+NOqVmhLHAU8I7zF3DMinZq84WEJr04="'
-  dnsco5cfwldtrkbduhcpfuiaim5lci72hyzdomainkeymiramenu:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneId:
-        Ref: zonemiramenu
-      RecordSets:
-      - Name: co5cfwldtrkbduhcpfuiaim5lci72hyz._domainkey.mira.menu.
-        Type: CNAME
-        TTL: '1800'
-        ResourceRecords:
-        - co5cfwldtrkbduhcpfuiaim5lci72hyz.dkim.amazonses.com
-  dnsdr4vdtbiedulk6xzzmiywp3ios6cny4fdomainkeymiramenu:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneId:
-        Ref: zonemiramenu
-      RecordSets:
-      - Name: dr4vdtbiedulk6xzzmiywp3ios6cny4f._domainkey.mira.menu.
-        Type: CNAME
-        TTL: '1800'
-        ResourceRecords:
-        - dr4vdtbiedulk6xzzmiywp3ios6cny4f.dkim.amazonses.com
-  dnsu5qjpz4oe3fsivqv5mzuurj7irn2m5ufdomainkeymiramenu:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneId:
-        Ref: zonemiramenu
-      RecordSets:
-      - Name: u5qjpz4oe3fsivqv5mzuurj7irn2m5uf._domainkey.mira.menu.
-        Type: CNAME
-        TTL: '1800'
-        ResourceRecords:
-        - u5qjpz4oe3fsivqv5mzuurj7irn2m5uf.dkim.amazonses.com

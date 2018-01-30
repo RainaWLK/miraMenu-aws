@@ -1,8 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  tableBranches:
+  Branches:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "Branches"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -12,9 +13,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '5'
-  tableBranchesB2C:
+  BranchesB2C:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "BranchesB2C"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -24,9 +26,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
-  tableItemsB2C:
+  ItemsB2C:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "ItemsB2C"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -36,9 +39,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
-  tableLock:
+  Lock:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "Lock"
       AttributeDefinitions:
       - AttributeName: name
         AttributeType: S
@@ -48,9 +52,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
-  tableMenus:
+  Menus:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "Menus"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -60,9 +65,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
-  tableRestaurants:
+  Restaurants:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "Restaurants"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -72,9 +78,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
-  tableUsers:
+  Users:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "Users"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -84,9 +91,10 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
-  tablephototmp:
+  phototmp:
     Type: AWS::DynamoDB::Table
     Properties:
+      TableName: "phototmp"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S
@@ -96,3 +104,6 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: '1'
         WriteCapacityUnits: '1'
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
