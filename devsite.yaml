@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: mesh-dev-site
+      AccessControl: PublicReadWrite
+      VersioningConfiguration:
+        Status: Enabled
+
+  WebsiteCDN:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - developer.mira.menu
+        Enabled: true
+        PriceClass: PriceClass_100
+        DefaultCacheBehavior:
+          TargetOriginId: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          ViewerProtocolPolicy: redirect-to-https
+          MinTTL: 0
+          AllowedMethods:
+          - HEAD
+          - GET
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+        Origins:
+        - DomainName: !GetAtt 
+          - S3Bucket
+          - DomainName
+          Id: !Join
+            - ''
+            - - 'S3-'
+              - !GetAtt
+                - S3Bucket
+                - DomainName
+          S3OriginConfig: {}
+        Restrictions:
+          GeoRestriction:
+            RestrictionType: none
+            Locations: []
+        ViewerCertificate:
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.1_2016
+
+  WebsiteDNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: mira.menu.
+      RecordSets:
+      - Name: developer.mira.menu.
+        Type: AAAA
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
+      - Name: developer.mira.menu.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !GetAtt 
+            - WebsiteCDN
+            - DomainName
