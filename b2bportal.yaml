@@ -4,7 +4,7 @@ Resources:
   S3Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: portal.mira.menu-bak
+      BucketName: portal.mira.menu
       AccessControl: PublicRead
       VersioningConfiguration: 
         Status: Enabled
@@ -18,7 +18,7 @@ Resources:
     Properties:
       DistributionConfig: 
         Aliases:
-        - portal.mira.menu-bak
+        - portal.mira.menu
         Comment: B2B portal
         DefaultRootObject: index.html
         Enabled: true
@@ -95,7 +95,7 @@ Resources:
             RestrictionType: none
             Locations: []
         ViewerCertificate:
-          AcmCertificateArn: arn:aws:acm:us-east-1:552950262288:certificate/a301990c-6368-4b13-bb8a-dcbdb2bf0973
+          AcmCertificateArn: arn:aws:acm:us-east-1:780139254791:certificate/3c611926-098e-409b-be52-4399ad1a0529
           SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.1_2016
 
