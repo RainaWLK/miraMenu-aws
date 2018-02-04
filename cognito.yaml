@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  UserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      AdminCreateUserConfig: 
+        AllowAdminCreateUserOnly: false
+      AliasAttributes: 
+        - preferred_username
+      AutoVerifiedAttributes: 
+        - email
+      MfaConfiguration: "OFF"
+      Policies: 
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: false
+          RequireNumbers: false
+          RequireSymbols: false
+          RequireUppercase: false
+      UserPoolName: MiraMenu_owner
+      Schema: 
+        - AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Name: name
+          StringAttributeConstraints:
+            MaxLength: 50
+            MinLength: 1
+          Required: true
+        - AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Name: "phone_number"
+          StringAttributeConstraints:
+            MaxLength: 20
+            MinLength: 8
+          Required: true
+
+  AppClient:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+        ClientName: miramenu-owner
+        GenerateSecret: true
+        RefreshTokenValidity: 30
+        UserPoolId: !Ref UserPool
+
+  MiraMenuOwnerIdentityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: MiraMenu_owner
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders: 
+        - ClientId: !Ref AppClient
+          ProviderName: !GetAtt 
+            - UserPool
+            - ProviderName
+          ServerSideTokenCheck: true
+
+  MiraMenuUserIdentityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: MiraMenu_users
+      AllowUnauthenticatedIdentities: true

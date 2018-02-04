@@ -42,6 +42,7 @@ Resources:
 #          - HEAD
 #          - GET
 #          - OPTIONS
+#          Compress: true
 #          ForwardedValues:
 #            QueryString: true
 #            Headers:
@@ -67,6 +68,7 @@ Resources:
           CachedMethods:
           - HEAD
           - GET
+          Compress: true
           ForwardedValues:
             QueryString: false
             Cookies:
