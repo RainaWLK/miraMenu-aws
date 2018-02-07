@@ -94,7 +94,7 @@ Resources:
   phototmp:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "phototmp"
+      TableName: "photo_tmp"
       AttributeDefinitions:
       - AttributeName: id
         AttributeType: S

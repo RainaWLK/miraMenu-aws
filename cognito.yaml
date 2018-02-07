@@ -40,7 +40,7 @@ Resources:
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
         ClientName: miramenu-owner
-        GenerateSecret: true
+        GenerateSecret: false
         RefreshTokenValidity: 30
         UserPoolId: !Ref UserPool
 
@@ -61,3 +61,5 @@ Resources:
     Properties:
       IdentityPoolName: MiraMenu_users
       AllowUnauthenticatedIdentities: true
+
+#bug: need identity pool authenticate/unauthenticate role
